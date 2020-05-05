@@ -34,7 +34,9 @@ export default class Task extends Component{
     }
 
     render(){
+
         return(
+            
             <View style = {styles.container}>
                 <TextInput 
                     style = {styles.input}
@@ -78,15 +80,18 @@ export default class Task extends Component{
             title: this.state.title,
             resume: this.state.resume,
             priority: this.state.priority,
-            isDone: this.state.isDone
+            isDone: this.state.isDone,
         };
-
+        if(this.state.title != '' && this.state.resume != '' || this.state.isDone == true){
         try{
             await writeTaskOnFirebaseAsync(task);
             this.props.navigation.goBack();
         }catch(error){
            Alert.alert("Error Saving", error.message);
         }
+    }else{
+        alert('Você precisa digitar um título e um texto para a tarefa')
+    }
     }
 
     
