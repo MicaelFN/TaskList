@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {readTasksFromFirebaseAsync} from '../services/FirebaseApi';
 import {TaskListView} from '../components/Components';
+import uuid from 'react-native-uuid';
 
 const imgCheckList = require('../assets/checklist.png');
 const imgPlus = require('../assets/plus.png');
@@ -17,13 +18,26 @@ export default class ToDoTasks extends Component{
     }
 
     state = {
-        tasks: [],
-    };
+        tasks: []
+    }
 
-    /* componentDidMount(){
-        //readTasksFromFirebaseAsync(this._fetchTasks.bind(this));
-        readTasksFromFirebaseAsync(this._fetchTasks.bind(this));
-    } */
+    render(){
+        return(
+            <View style={styles.container}>
+                <TaskListView tasks = {this.state.tasks} 
+                    navigation={this.props.navigation}/>
+                <TouchableOpacity 
+                    style={styles.floatButton}
+                    onPress={() => this._goToTask()}>
+                    <Image source={imgPlus} style={styles.img} />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+    
+    _goToTask(){
+            this.props.navigation.navigate('Task');
+    }
 
     componentDidMount() {
         readTasksFromFirebaseAsync(this._fetchTasks.bind(this));
@@ -34,24 +48,9 @@ export default class ToDoTasks extends Component{
         this.setState({tasks: tasksToDo});
     }
 
-    _goToTask(){
-        this.props.navigation.navigate('Task');
-    }
+    
 
-    render(){
-        return(
-            <View style={styles.container}>
-                <TaskListView tasks = {this.state.tasks} 
-                navigation={this.props.navigation}/>
-                <TouchableOpacity 
-                    style={styles.floatButton}
-                    onPress={() => this._goToTask()}>
-                    <Image source={imgPlus} style={styles.img} />
-                </TouchableOpacity>
-            </View>
-        );
-    }
-
+    
 }
 
 const styles = StyleSheet.create({

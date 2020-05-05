@@ -23,7 +23,7 @@ export default class DoneTasks extends Component{
         return(
             <View style={styles.container}>
                 <TaskListView tasks = {this.state.tasks} 
-                navigation={this.props.navigation}/>
+                    navigation={this.props.navigation}/>
             </View>
         );
     }

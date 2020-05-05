@@ -9,11 +9,10 @@ const config = {
     messagingSenderId: "772623171731"
 };
 
-//export const initializeFirebaseApi = () => firebase.initializeApp(config);
 export const initializeFirebaseApi = () => firebase.initializeApp(config);
 
 export const createUserOnFirebaseAsync = async(email, password) => {
-    const {user} = await firebase
+    const user = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password);
     return user;
@@ -40,6 +39,29 @@ export const currentFirebaseUser = () => {
             });
     });
 }
+export const deletetaskOnFirebaseAsync = async(task) =>{
+    const user = await currentFirebaseUser();
+    
+    var taskReference = firebase
+        .database()
+        .ref(user.uid);
+
+    
+    const id = task.id ?
+        taskReference
+            .child('tasks')
+            .remove(id)
+            .id
+        :
+        taskReference
+            .child('tasks')
+            //.remove()
+            .id;
+
+    return await taskReference
+        .child(`tasks/${id}`)
+        .update(task);
+}
 
 export const writeTaskOnFirebaseAsync = async(task) => {
     const user = await currentFirebaseUser();
@@ -47,11 +69,6 @@ export const writeTaskOnFirebaseAsync = async(task) => {
     var taskReference = firebase
         .database()
         .ref(user.uid);
-    
-    /* const key = taskReference
-        .child('tasks')
-        .push()
-        .key; */
     
     const key = task.key ?
         task.key:
